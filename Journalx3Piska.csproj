@@ -80,13 +80,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\202605040406157_InitialData.cs" />
-    <Compile Include="Migrations\202605040406157_InitialData.Designer.cs">
-      <DependentUpon>202605040406157_InitialData.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202605040411540_InitialData2.cs" />
-    <Compile Include="Migrations\202605040411540_InitialData2.Designer.cs">
-      <DependentUpon>202605040411540_InitialData2.cs</DependentUpon>
+    <Compile Include="Migrations\202605040633204_Initial.cs" />
+    <Compile Include="Migrations\202605040633204_Initial.Designer.cs">
+      <DependentUpon>202605040633204_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Grade.cs" />
@@ -107,11 +103,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Migrations\202605040406157_InitialData.resx">
-      <DependentUpon>202605040406157_InitialData.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202605040411540_InitialData2.resx">
-      <DependentUpon>202605040411540_InitialData2.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202605040633204_Initial.resx">
+      <DependentUpon>202605040633204_Initial.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

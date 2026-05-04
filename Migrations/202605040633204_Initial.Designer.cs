@@ -7,13 +7,13 @@ namespace Journalx3Piska.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.5.2")]
-    public sealed partial class InitialData2 : IMigrationMetadata
+    public sealed partial class Initial : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialData2));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial));
         
         string IMigrationMetadata.Id
         {
-            get { return "202605040411540_InitialData2"; }
+            get { return "202605040633204_Initial"; }
         }
         
         string IMigrationMetadata.Source
