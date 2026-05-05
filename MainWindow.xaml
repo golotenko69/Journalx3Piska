@@ -7,6 +7,101 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+
+        <StackPanel Margin="20">
+
+            <!-- Заголовок -->
+            <TextBlock Text="Оценки"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Margin="0 0 0 20"/>
+
+            <!-- ФИЛЬТР -->
+            <StackPanel Orientation="Horizontal" Margin="0 0 0 15">
+
+                <ComboBox Width="220"
+                  ItemsSource="{Binding Subjects}"
+                  SelectedItem="{Binding SelectedFilterSubject}"
+                  DisplayMemberPath="SubjectName"/>
+                    </StackPanel>
+
+            <!-- ТАБЛИЦА -->
+            <DataGrid ItemsSource="{Binding Grades}"
+                      AutoGenerateColumns="False"
+                      Height="280">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Ученик" Binding="{Binding StudentName}" Width="*"/>
+                    <DataGridTextColumn Header="Предмет" Binding="{Binding SubjectName}" Width="*"/>
+                    <DataGridTextColumn Header="Дата" Binding="{Binding Date}" Width="*"/>
+                    <DataGridTextColumn Header="Оценка" Binding="{Binding Value}" Width="*"/>
+                    <DataGridTextColumn Header="Средний балл" Binding="{Binding AverageGrade}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <!-- КНОПКА -->
+            <Button Content="Поставить оценку"
+                    Width="200"
+                    Margin="0 20 0 0"
+                    Command="{Binding OpenGradeDialogCommand}"/>
+
+        </StackPanel>
+
+        <!-- DIALOG -->
+        <Grid Background="#80000000"
+              Visibility="{Binding IsDialogOpen, Converter={StaticResource BoolToVisibility}}">
+
+            <Border Width="400"
+                    Padding="20"
+                    Background="White"
+                    CornerRadius="12"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center">
+
+                <StackPanel>
+
+                    <TextBlock Text="Выставление оценки"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               Margin="0 0 0 15"/>
+
+                    <!-- Ученик -->
+                    <TextBlock Text="Ученик"/>
+                    <ComboBox ItemsSource="{Binding Students}"
+                              SelectedItem="{Binding SelectedStudent}"
+                              DisplayMemberPath="FullName"/>
+
+                    <!-- Предмет -->
+                    <TextBlock Text="Предмет"/>
+                    <ComboBox ItemsSource="{Binding Subjects}"
+                              SelectedItem="{Binding SelectedSubject}"
+                              DisplayMemberPath="SubjectName"/>
+
+                    <!-- Дата -->
+                    <TextBlock Text="Дата"/>
+                    <DatePicker SelectedDate="{Binding SelectedDate}"/>
+
+                    <!-- Оценка -->
+                    <TextBlock Text="Оценка"/>
+                    <ComboBox ItemsSource="{Binding GradesList}"
+                              SelectedItem="{Binding SelectedGrade}"/>
+
+                    <!-- Кнопки -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 15 0 0">
+
+                        <Button Content="Отмена"
+                                Margin="0 0 10 0"
+                                Command="{Binding CloseDialogCommand}"/>
+
+                        <Button Content="Сохранить"
+                                Background="ForestGreen"
+                                Foreground="White"
+                                Command="{Binding AddGradeCommand}"/>
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+        </Grid>
+
     </Grid>
 </Window>

@@ -5,6 +5,7 @@ public class SchoolContext : DbContext
     public SchoolContext()
         : base("SchoolJournalConnection")
     {
+        Database.SetInitializer<SchoolContext>(null);
     }
 
     public DbSet<User> Users { get; set; }

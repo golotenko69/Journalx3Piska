@@ -19,7 +19,7 @@
             <StackPanel>
 
                 <!-- Заголовок -->
-                <TextBlock Text="Электронный журнал тест"
+                <TextBlock Text="Электронный журнал"
                            FontSize="20"
                            FontWeight="Bold"
                            HorizontalAlignment="Center"
