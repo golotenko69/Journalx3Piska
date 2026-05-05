@@ -91,6 +91,14 @@
     <Compile Include="Migrations\202605040633204_Initial.Designer.cs">
       <DependentUpon>202605040633204_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202605041318542_InitialTrigger.cs" />
+    <Compile Include="Migrations\202605041318542_InitialTrigger.Designer.cs">
+      <DependentUpon>202605041318542_InitialTrigger.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202605041320283_InitialProcedure.cs" />
+    <Compile Include="Migrations\202605041320283_InitialProcedure.Designer.cs">
+      <DependentUpon>202605041320283_InitialProcedure.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Grade.cs" />
     <Compile Include="Models\Student.cs" />
@@ -112,6 +120,12 @@
     </Compile>
     <EmbeddedResource Include="Migrations\202605040633204_Initial.resx">
       <DependentUpon>202605040633204_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202605041318542_InitialTrigger.resx">
+      <DependentUpon>202605041318542_InitialTrigger.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202605041320283_InitialProcedure.resx">
+      <DependentUpon>202605041320283_InitialProcedure.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
