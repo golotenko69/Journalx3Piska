@@ -40,7 +40,7 @@
                 <!-- Кнопка входа -->
                 <Button Content="Войти"
                         Height="35"
-                        Background="#4CAF50"
+                        Background="ForestGreen"
                         Foreground="White"
                         FontWeight="Bold"
                         Command="{Binding LoginCommand}"/>
