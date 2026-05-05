@@ -19,7 +19,7 @@
             <StackPanel>
 
                 <!-- Заголовок -->
-                <TextBlock Text="Вход в систему"
+                <TextBlock Text="Электронный журнал"
                            FontSize="20"
                            FontWeight="Bold"
                            HorizontalAlignment="Center"
