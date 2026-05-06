@@ -4,14 +4,180 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Journalx3Piska.View"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="LoginView">
+      mc:Ignorable="d"
+      Background="#D6EAF8">
+
+    <Page.Resources>
+
+        <!-- 🔵 TextBox -->
+        <Style TargetType="TextBox">
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Margin" Value="0,5,0,15"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="FontSize" Value="14"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="Border"
+                                Background="#F7F9FC"
+                                BorderBrush="#D0D7E2"
+                                BorderThickness="1"
+                                CornerRadius="6">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <!-- Hover -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetName="Border"
+                                                Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                To="#4A90E2"
+                                                Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetName="Border"
+                                                Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                To="#D0D7E2"
+                                                Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+
+                            <!-- Focus -->
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="Border"
+                                        Property="BorderBrush"
+                                        Value="#4A90E2"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- 🔒 PasswordBox -->
+        <Style TargetType="PasswordBox">
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Margin" Value="0,5,0,20"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="FontSize" Value="14"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border x:Name="Border"
+                                Background="#F7F9FC"
+                                BorderBrush="#D0D7E2"
+                                BorderThickness="1"
+                                CornerRadius="6">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <!-- Hover -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetName="Border"
+                                                Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                To="#4A90E2"
+                                                Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetName="Border"
+                                                Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                To="#D0D7E2"
+                                                Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+
+                            <!-- Focus -->
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="Border"
+                                        Property="BorderBrush"
+                                        Value="#4A90E2"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- 🟦 Кнопка (глобальный стиль) -->
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Background" Value="#4A90E2"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <!-- Hover -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="#357ABD"/>
+                            </Trigger>
+
+                            <!-- Press -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="#2C5F9E"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Page.Resources>
 
     <Grid>
-        <Border Width="320"
-                Padding="20"
-                Background="White"
+
+        <!-- 💠 Карточка -->
+        <Border Width="340"
+                Padding="25"
+                Background="#F0F6FF"
                 CornerRadius="12"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Center">
@@ -20,44 +186,26 @@
 
                 <!-- Заголовок -->
                 <TextBlock Text="Электронный журнал"
-                           FontSize="20"
+                           FontSize="22"
                            FontWeight="Bold"
+                           Foreground="#2C3E50"
                            HorizontalAlignment="Center"
-                           Margin="0 0 0 20"/>
+                           Margin="0,0,0,25"/>
 
                 <!-- Логин -->
-                <TextBlock Text="Логин"/>
-                <TextBox Height="30"
-                         Margin="0 5 0 10"
-                         Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="Логин" Foreground="#555"/>
+                <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <!-- Пароль -->
-                <TextBlock Text="Пароль"/>
-                <PasswordBox x:Name="PasswordBox"
-                             Height="30"
-                             Margin="0 5 0 20"/>
+                <TextBlock Text="Пароль" Foreground="#555"/>
+                <PasswordBox x:Name="PasswordBox"/>
 
-                <!-- Кнопка входа -->
+                <!-- Кнопка -->
                 <Button Content="Войти"
-                        Height="35"
-                        Background="ForestGreen"
-                        Foreground="White"
-                        FontWeight="Bold"
                         Command="{Binding LoginCommand}"/>
-
-                <!-- Разделитель -->
-                <TextBlock Text="или"
-                           HorizontalAlignment="Center"
-                           Margin="10"/>
-
-                <!-- Регистрация -->
-                <Button Content="Регистрация"
-                        Height="30"
-                        Background="#2196F3"
-                        Foreground="White"
-                        Command="{Binding RegisterCommand}"/>
 
             </StackPanel>
         </Border>
+
     </Grid>
 </Page>

@@ -27,9 +27,16 @@ namespace Journalx3Piska.ViewModels
 
         public ICommand ShowGradesCommand { get; }
 
+        public ICommand ShowSubjectsCommand { get; }
+
         public MainWindowViewModel()
         {
             ShowGradesCommand = new RelayCommand(ShowGrades);
+
+            ShowSubjectsCommand = new RelayCommand(() =>
+            {
+                CurrentViewModel = new SubjectsViewModel();
+            });
 
             // стартовый экран
             ShowGrades();

@@ -73,6 +73,8 @@ namespace Journalx3Piska.ViewModels
             FilterCommand = new RelayCommand(FilterGrades);
         }
 
+
+
         private void LoadData()
         {
             Students = new ObservableCollection<Student>(_context.Students.ToList());
@@ -120,6 +122,8 @@ namespace Journalx3Piska.ViewModels
             OnPropertyChanged(nameof(Subjects));
             OnPropertyChanged(nameof(Grades));
         }
+
+
 
         private void AddGrade()
         {
