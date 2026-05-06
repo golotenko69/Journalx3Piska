@@ -72,7 +72,7 @@
 
                     <!-- Предмет -->
                     <TextBlock Text="Предмет"/>
-                    <ComboBox ItemsSource="{Binding Subjects}"
+                    <ComboBox ItemsSource="{Binding SubjectsForAdd}"
                              SelectedItem="{Binding SelectedSubject}"
                              DisplayMemberPath="SubjectName"/>
 

@@ -22,6 +22,7 @@ namespace Journalx3Piska.ViewModels
 
         public Student SelectedStudent { get; set; }
         public Subject SelectedSubject { get; set; }
+        public ObservableCollection<Subject> SubjectsForAdd { get; set; }
         public DateTime? SelectedDate { get; set; }
         public int SelectedGrade { get; set; }
 
@@ -77,6 +78,8 @@ namespace Journalx3Piska.ViewModels
             Students = new ObservableCollection<Student>(_context.Students.ToList());
 
             var subjectsFromDb = _context.Subjects.ToList();
+
+            SubjectsForAdd = new ObservableCollection<Subject>(subjectsFromDb);
 
             subjectsFromDb.Insert(0, new Subject
             {
