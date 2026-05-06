@@ -8,6 +8,9 @@ namespace Journalx3Piska.ViewModels
 {
     public class GradeView
     {
+
+        public int GradeID { get; set; } // ДОБАВЬ
+
         public string StudentName { get; set; }
         public string SubjectName { get; set; }
         public DateTime Date { get; set; }

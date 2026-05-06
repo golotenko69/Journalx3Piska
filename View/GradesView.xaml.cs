@@ -23,6 +23,7 @@ namespace Journalx3Piska.View
         public GradesView()
         {
             InitializeComponent();
+
         }
     }
 }

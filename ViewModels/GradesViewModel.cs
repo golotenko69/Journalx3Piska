@@ -2,41 +2,164 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using System.Data.Entity;
+using System.Globalization;
+using System.Linq;
+using System.Windows.Data;
+using System.Windows.Input;
 
 namespace Journalx3Piska.ViewModels
 {
+    // =========================
+    // CONVERTERS
+    // =========================
+
+    public class EditModeToTitleConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (bool)value ? "Редактирование оценки" : "Выставление оценки";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class EditModeToButtonConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (bool)value ? "Сохранить" : "Добавить";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    // =========================
+    // VIEWMODEL
+    // =========================
+
     internal class GradesViewModel : INotifyPropertyChanged
     {
-        private SchoolContext _context;
+        private readonly SchoolContext _context;
 
         public ObservableCollection<GradeView> Grades { get; set; }
         public ObservableCollection<Student> Students { get; set; }
         public ObservableCollection<Subject> Subjects { get; set; }
-
-        public List<int> GradesList { get; set; } = new List<int> { 2, 3, 4, 5 };
-
-        public Student SelectedStudent { get; set; }
-        public Subject SelectedSubject { get; set; }
         public ObservableCollection<Subject> SubjectsForAdd { get; set; }
-        public DateTime? SelectedDate { get; set; }
-        public int SelectedGrade { get; set; }
 
-        public ICommand AddGradeCommand { get; }
+        public List<int> GradesList { get; set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public GradesViewModel()
+        {
+            _context = new SchoolContext();
 
-        private void OnPropertyChanged(string name)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            GradesList = new List<int> { 2, 3, 4, 5 };
+
+            OpenGradeDialogCommand = new RelayCommand(OpenAddDialog);
+            CloseDialogCommand = new RelayCommand(delegate { IsDialogOpen = false; });
+
+            SaveGradeCommand = new RelayCommand(SaveGrade);
+            EditGradeCommand = new RelayCommand(EditGrade);
+            DeleteGradeCommand = new RelayCommand(DeleteGrade);
+
+            LoadData();
+        }
+
+        // =========================
+        // STATE
+        // =========================
+
+        private bool _isDialogOpen;
+        public bool IsDialogOpen
+        {
+            get { return _isDialogOpen; }
+            set
+            {
+                _isDialogOpen = value;
+                OnPropertyChanged(nameof(IsDialogOpen));
+            }
+        }
+
+        private bool _isEditMode;
+        public bool IsEditMode
+        {
+            get { return _isEditMode; }
+            set
+            {
+                _isEditMode = value;
+                OnPropertyChanged(nameof(IsEditMode));
+            }
+        }
+
+        // =========================
+        // SELECTED (ВАЖНО!)
+        // =========================
+
+        private Student _selectedStudent;
+        public Student SelectedStudent
+        {
+            get { return _selectedStudent; }
+            set
+            {
+                _selectedStudent = value;
+                OnPropertyChanged(nameof(SelectedStudent));
+            }
+        }
+
+        private Subject _selectedSubject;
+        public Subject SelectedSubject
+        {
+            get { return _selectedSubject; }
+            set
+            {
+                _selectedSubject = value;
+                OnPropertyChanged(nameof(SelectedSubject));
+            }
+        }
+
+        private DateTime? _selectedDate;
+        public DateTime? SelectedDate
+        {
+            get { return _selectedDate; }
+            set
+            {
+                _selectedDate = value;
+                OnPropertyChanged(nameof(SelectedDate));
+            }
+        }
+
+        private int _selectedGrade;
+        public int SelectedGrade
+        {
+            get { return _selectedGrade; }
+            set
+            {
+                _selectedGrade = value;
+                OnPropertyChanged(nameof(SelectedGrade));
+            }
+        }
+
+        private GradeView _selectedGradeItem;
+        public GradeView SelectedGradeItem
+        {
+            get { return _selectedGradeItem; }
+            set
+            {
+                _selectedGradeItem = value;
+                OnPropertyChanged(nameof(SelectedGradeItem));
+            }
+        }
 
         private Subject _selectedFilterSubject;
         public Subject SelectedFilterSubject
         {
-            get => _selectedFilterSubject;
+            get { return _selectedFilterSubject; }
             set
             {
                 _selectedFilterSubject = value;
@@ -45,112 +168,182 @@ namespace Journalx3Piska.ViewModels
             }
         }
 
-        public ICommand FilterCommand { get; }
-
-        private bool _isDialogOpen;
-        public bool IsDialogOpen
-        {
-            get => _isDialogOpen;
-            set
-            {
-                _isDialogOpen = value;
-                OnPropertyChanged(nameof(IsDialogOpen));
-            }
-        }
+        // =========================
+        // COMMANDS
+        // =========================
 
         public ICommand OpenGradeDialogCommand { get; }
         public ICommand CloseDialogCommand { get; }
+        public ICommand SaveGradeCommand { get; }
+        public ICommand EditGradeCommand { get; }
+        public ICommand DeleteGradeCommand { get; }
 
-        public GradesViewModel()
-        {
-            _context = new SchoolContext();
-
-            LoadData();
-
-            OpenGradeDialogCommand = new RelayCommand(() => IsDialogOpen = true);
-            CloseDialogCommand = new RelayCommand(() => IsDialogOpen = false);
-            AddGradeCommand = new RelayCommand(AddGrade);
-            FilterCommand = new RelayCommand(FilterGrades);
-        }
-
-
+        // =========================
+        // LOAD DATA
+        // =========================
 
         private void LoadData()
         {
             Students = new ObservableCollection<Student>(_context.Students.ToList());
 
-            var subjectsFromDb = _context.Subjects.ToList();
+            var subjects = _context.Subjects.ToList();
 
-            SubjectsForAdd = new ObservableCollection<Subject>(subjectsFromDb);
+            SubjectsForAdd = new ObservableCollection<Subject>(subjects);
 
-            subjectsFromDb.Insert(0, new Subject
+            subjects.Insert(0, new Subject
             {
                 SubjectID = 0,
                 SubjectName = "Все предметы"
             });
 
-            Subjects = new ObservableCollection<Subject>(subjectsFromDb);
+            Subjects = new ObservableCollection<Subject>(subjects);
 
-            var gradesFromDb = _context.Grades
-                .Include(g => g.Subject)
-                .Include(g => g.Student)
-                .ToList();
-
-            var avgDict = gradesFromDb
-                .GroupBy(g => g.StudentID)
-                .ToDictionary(
-                    g => g.Key,
-                    g => Math.Round(g.Average(x => x.GradeValue), 2)
-                );
+            RefreshGrades();
 
             SelectedFilterSubject = Subjects.FirstOrDefault();
 
+            OnPropertyChanged(nameof(Students));
+            OnPropertyChanged(nameof(Subjects));
+        }
+
+        private void RefreshGrades()
+        {
+            var data = _context.Grades
+                .Include(g => g.Student)
+                .Include(g => g.Subject)
+                .ToList();
+
+            var avg = data
+                .GroupBy(g => new { g.StudentID, g.SubjectID })
+                .ToDictionary(
+                    g => g.Key.StudentID + "_" + g.Key.SubjectID,
+                    g => Math.Round(g.Average(x => x.GradeValue), 2)
+                );
+
             Grades = new ObservableCollection<GradeView>(
-                gradesFromDb.Select(g => new GradeView
+                data.Select(g =>
                 {
-                    StudentName = g.Student != null ? g.Student.FullName : "нет",
-                    SubjectName = g.Subject != null ? g.Subject.SubjectName : "нет",
-                    Date = g.GradeDate,
-                    Value = g.GradeValue,
-                    AverageGrade = avgDict.ContainsKey(g.StudentID)
-                        ? avgDict[g.StudentID]
-                        : 0
+                    string key = g.StudentID + "_" + g.SubjectID;
+
+                    return new GradeView
+                    {
+                        GradeID = g.GradeID,
+                        StudentName = g.Student != null ? g.Student.FullName : "нет",
+                        SubjectName = g.Subject != null ? g.Subject.SubjectName : "нет",
+                        Date = g.GradeDate,
+                        Value = g.GradeValue,
+                        AverageGrade = avg.ContainsKey(key) ? avg[key] : 0
+                    };
                 })
             );
 
-            OnPropertyChanged(nameof(Students));
-            OnPropertyChanged(nameof(Subjects));
             OnPropertyChanged(nameof(Grades));
         }
 
+        // =========================
+        // ADD
+        // =========================
 
+        private void OpenAddDialog()
+        {
+            IsEditMode = false;
 
-        private void AddGrade()
+            SelectedGradeItem = null;
+            SelectedStudent = null;
+            SelectedSubject = null;
+            SelectedDate = null;
+            SelectedGrade = 0;
+
+            IsDialogOpen = true;
+        }
+
+        // =========================
+        // SAVE (ADD + EDIT)
+        // =========================
+
+        private void SaveGrade()
         {
             if (SelectedStudent == null || SelectedSubject == null || SelectedDate == null)
                 return;
 
-            var grade = new Grade
-            {
-                StudentID = SelectedStudent.StudentID,
-                SubjectID = SelectedSubject.SubjectID,
-                GradeDate = SelectedDate.Value,
-                GradeValue = SelectedGrade
-            };
+            Grade grade;
 
-            _context.Grades.Add(grade);
+            if (IsEditMode && SelectedGradeItem != null)
+            {
+                grade = _context.Grades.FirstOrDefault(g => g.GradeID == SelectedGradeItem.GradeID);
+                if (grade == null) return;
+            }
+            else
+            {
+                grade = new Grade();
+                _context.Grades.Add(grade);
+            }
+
+            grade.StudentID = SelectedStudent.StudentID;
+            grade.SubjectID = SelectedSubject.SubjectID;
+            grade.GradeDate = SelectedDate.Value;
+            grade.GradeValue = SelectedGrade;
+
             _context.SaveChanges();
 
-            LoadData();
-
+            RefreshGrades();
             IsDialogOpen = false;
         }
+
+        // =========================
+        // EDIT (КЛЮЧЕВОЙ МОМЕНТ)
+        // =========================
+
+        private void EditGrade()
+        {
+            if (SelectedGradeItem == null)
+                return;
+
+            var grade = _context.Grades
+                .FirstOrDefault(g => g.GradeID == SelectedGradeItem.GradeID);
+
+            if (grade == null)
+                return;
+
+            SelectedStudent = Students.FirstOrDefault(s => s.StudentID == grade.StudentID);
+            SelectedSubject = SubjectsForAdd.FirstOrDefault(s => s.SubjectID == grade.SubjectID);
+            SelectedDate = grade.GradeDate;
+            SelectedGrade = grade.GradeValue;
+
+            IsEditMode = true;
+            IsDialogOpen = true;
+        }
+
+        // =========================
+        // DELETE
+        // =========================
+
+        private void DeleteGrade()
+        {
+            if (SelectedGradeItem == null)
+                return;
+
+            var grade = _context.Grades
+                .FirstOrDefault(g => g.GradeID == SelectedGradeItem.GradeID);
+
+            if (grade == null)
+                return;
+
+            _context.Grades.Remove(grade);
+            _context.SaveChanges();
+
+            RefreshGrades();
+        }
+
+        // =========================
+        // FILTER
+        // =========================
 
         private void FilterGrades()
         {
             var query = _context.Grades
-                .Include(g => g.Subject)
                 .Include(g => g.Student)
+                .Include(g => g.Subject)
                 .AsQueryable();
 
             if (SelectedFilterSubject != null && SelectedFilterSubject.SubjectID != 0)
@@ -158,34 +351,44 @@ namespace Journalx3Piska.ViewModels
                 query = query.Where(g => g.SubjectID == SelectedFilterSubject.SubjectID);
             }
 
-            var gradesFromDb = query.ToList();
+            var data = query.ToList();
 
-            var avgDict = gradesFromDb
+            var avg = data
                 .GroupBy(g => new { g.StudentID, g.SubjectID })
                 .ToDictionary(
-                    g => $"{g.Key.StudentID}_{g.Key.SubjectID}",
+                    g => g.Key.StudentID + "_" + g.Key.SubjectID,
                     g => Math.Round(g.Average(x => x.GradeValue), 2)
                 );
 
             Grades = new ObservableCollection<GradeView>(
-                gradesFromDb.Select(g =>
+                data.Select(g =>
                 {
-                    var key = $"{g.StudentID}_{g.SubjectID}";
+                    string key = g.StudentID + "_" + g.SubjectID;
 
                     return new GradeView
                     {
+                        GradeID = g.GradeID,
                         StudentName = g.Student != null ? g.Student.FullName : "нет",
                         SubjectName = g.Subject != null ? g.Subject.SubjectName : "нет",
                         Date = g.GradeDate,
                         Value = g.GradeValue,
-                        AverageGrade = avgDict.ContainsKey(key)
-                            ? avgDict[key]
-                            : 0
+                        AverageGrade = avg.ContainsKey(key) ? avg[key] : 0
                     };
                 })
             );
 
             OnPropertyChanged(nameof(Grades));
+        }
+
+        // =========================
+        // INotify
+        // =========================
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }
