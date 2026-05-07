@@ -82,6 +82,15 @@
     <Compile Include="View\GradesView.xaml.cs">
       <DependentUpon>GradesView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\GradesViewUserControlStudent.xaml.cs">
+      <DependentUpon>GradesViewUserControlStudent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\GradeViewForStudent.xaml.cs">
+      <DependentUpon>GradeViewForStudent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\GradeViewForTeacher.xaml.cs">
+      <DependentUpon>GradeViewForTeacher.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
@@ -102,6 +111,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\GradesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\GradesViewUserControlStudent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\GradeViewForStudent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\GradeViewForTeacher.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

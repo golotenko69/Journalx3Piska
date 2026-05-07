@@ -9,13 +9,18 @@ namespace Journalx3Piska.View
         {
             InitializeComponent();
             var vm = new LoginViewModel();
-            vm.LoginSuccess += () =>
-            {
-                var mainWindow = new MainWindow();
-                mainWindow.Show();
-                this.Close();
-            };
+            
             DataContext = vm;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is LoginViewModel viewModel)
+            {
+                // Мы берем пароль напрямую из PasswordBox и передаем его в ExecuteLogin
+                string password = PasswordBox.Password;
+                viewModel.LoginCommand.Execute(password);
+            }
         }
     }
 }

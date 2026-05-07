@@ -220,7 +220,7 @@
 
                 <!-- Кнопка -->
                 <Button Content="Войти"
-                        Command="{Binding LoginCommand}"/>
+                        Click="Button_Click"/>
 
             </StackPanel>
         </Border>

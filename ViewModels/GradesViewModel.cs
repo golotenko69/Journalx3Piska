@@ -62,7 +62,9 @@ namespace Journalx3Piska.ViewModels
             GradesList = new List<int> { 2, 3, 4, 5 };
 
             OpenGradeDialogCommand = new RelayCommand(OpenAddDialog);
-            CloseDialogCommand = new RelayCommand(delegate { IsDialogOpen = false; });
+            // В конструкторе вашей ViewModel
+            RelayCommand relayCommand = new RelayCommand(() => { IsDialogOpen = false; });
+            CloseDialogCommand = relayCommand;
 
             SaveGradeCommand = new RelayCommand(SaveGrade);
             EditGradeCommand = new RelayCommand(EditGrade);
