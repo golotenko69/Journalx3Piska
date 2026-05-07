@@ -208,6 +208,7 @@ namespace Journalx3Piska.ViewModels
 
         private void RefreshGrades()
         {
+            SelectedGradeItem = null;
             var data = _context.Grades
                 .Include(g => g.Student)
                 .Include(g => g.Subject)
@@ -284,6 +285,11 @@ namespace Journalx3Piska.ViewModels
             grade.GradeDate = SelectedDate.Value;
             grade.GradeValue = SelectedGrade;
 
+            // Detach чтобы EF не трогал Student при SaveChanges
+            var entry = _context.Entry(SelectedStudent);
+            if (entry.State != System.Data.Entity.EntityState.Detached)
+                entry.State = System.Data.Entity.EntityState.Detached;
+
             _context.SaveChanges();
 
             RefreshGrades();
@@ -323,9 +329,10 @@ namespace Journalx3Piska.ViewModels
             if (SelectedGradeItem == null)
                 return;
 
-            var grade = _context.Grades
-                .FirstOrDefault(g => g.GradeID == SelectedGradeItem.GradeID);
+            int idToDelete = SelectedGradeItem.GradeID;
+            SelectedGradeItem = null;
 
+            var grade = _context.Grades.FirstOrDefault(g => g.GradeID == idToDelete);
             if (grade == null)
                 return;
 
@@ -333,6 +340,7 @@ namespace Journalx3Piska.ViewModels
             _context.SaveChanges();
 
             RefreshGrades();
+            FilterGrades();
         }
 
         // =========================
@@ -341,6 +349,7 @@ namespace Journalx3Piska.ViewModels
 
         private void FilterGrades()
         {
+            SelectedGradeItem = null;
             var query = _context.Grades
                 .Include(g => g.Student)
                 .Include(g => g.Subject)

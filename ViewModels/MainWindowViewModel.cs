@@ -29,16 +29,17 @@ namespace Journalx3Piska.ViewModels
 
         public ICommand ShowSubjectsCommand { get; }
 
+        public ICommand ExitCommand { get; }
+
+
         public MainWindowViewModel()
         {
             ShowGradesCommand = new RelayCommand(ShowGrades);
-
             ShowSubjectsCommand = new RelayCommand(() =>
             {
                 CurrentViewModel = new SubjectsViewModel();
             });
-
-            // стартовый экран
+            ExitCommand = new RelayCommand(Exit); // ← добавь
             ShowGrades();
         }
 
@@ -47,8 +48,26 @@ namespace Journalx3Piska.ViewModels
             CurrentViewModel = new GradesViewModel();
         }
 
+        private void Exit()
+        {
+            var loginWindow = new Journalx3Piska.View.LoginView();
+            loginWindow.Show();
+
+            // Закрываем MainWindow
+            foreach (System.Windows.Window w in System.Windows.Application.Current.Windows)
+            {
+                if (w is MainWindow)
+                {
+                    w.Close();
+                    break;
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string name)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+
     }
 }

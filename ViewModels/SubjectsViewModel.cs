@@ -16,6 +16,7 @@ namespace Journalx3Piska.ViewModels
     {
         private SchoolContext _context = new SchoolContext();
 
+
         public ObservableCollection<Subject> Subjects { get; set; }
 
         private Subject _selectedSubject;

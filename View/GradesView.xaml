@@ -14,6 +14,83 @@
         <vm:EditModeToButtonConverter x:Key="EditModeToButtonConverter"/>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
 
+        <!-- ================= COMBOBOX FIX ================= -->
+        <Style x:Key="RoundedComboBox" TargetType="ComboBox">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#D0D5DD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+
+                            <Border x:Name="Border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="6">
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="30"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- FIXED -->
+                                    <ContentPresenter
+                                        Margin="10,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Content="{TemplateBinding SelectionBoxItem}"
+                                        ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                        ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                        ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"/>
+
+                                    <ToggleButton Grid.Column="1"
+                                                  IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                                  Background="Transparent"
+                                                  BorderThickness="0">
+                                        <Path Data="M 0 0 L 4 4 L 8 0 Z"
+                                              Fill="#667085"
+                                              Width="8"
+                                              Height="4"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                                    </ToggleButton>
+                                </Grid>
+                            </Border>
+
+                            <Popup IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   Placement="Bottom"
+                                   AllowsTransparency="True">
+
+                                <Border Background="White"
+                                        BorderBrush="#D0D5DD"
+                                        BorderThickness="1"
+                                        CornerRadius="6"
+                                        Margin="0,4,0,0">
+
+                                    <ScrollViewer>
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ТЕКСТ -->
+        <Style x:Key="LeftText" TargetType="TextBlock">
+            <Setter Property="Margin" Value="10,0,0,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+
         <!-- DataGrid -->
         <Style TargetType="DataGrid">
             <Setter Property="Background" Value="Transparent"/>
@@ -44,12 +121,6 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
 
-        <!-- Текст слева -->
-        <Style x:Key="LeftText" TargetType="TextBlock">
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="10,0,0,0"/>
-        </Style>
 
         <!-- Строки -->
         <Style TargetType="DataGridRow">
@@ -203,14 +274,16 @@
                         Margin="0,0,0,15">
 
                 <!-- Стандартный ComboBox без кастомного шаблона -->
-                <ComboBox Width="220"
+                <ComboBox Style="{StaticResource RoundedComboBox}"
+                          Width="220"
                           Height="34"
                           ItemsSource="{Binding Subjects}"
                           SelectedItem="{Binding SelectedFilterSubject}"
                           DisplayMemberPath="SubjectName"
                           Foreground="#2C3E50"
                           FontSize="12"
-                          Margin="0,0,10,0"/>
+                          Margin="0,0,10,0"
+                          VerticalContentAlignment="Center"/>
 
                 <Button Content="Поставить оценку"
                         Width="180"
@@ -219,14 +292,14 @@
                         Margin="0,0,8,0"
                         Command="{Binding OpenGradeDialogCommand}"/>
 
-                <Button Content="Изменить"
+                <Button Content="Изменить оценку"
                         Width="120"
                         Height="34"
                         Style="{StaticResource OrangeButton}"
                         Margin="0,0,8,0"
                         Command="{Binding EditGradeCommand}"/>
 
-                <Button Content="Удалить"
+                <Button Content="Удалить оценку"
                         Width="120"
                         Height="34"
                         Style="{StaticResource RedButton}"
@@ -354,23 +427,19 @@
                         <!-- Ученик -->
                         <StackPanel Grid.Row="0" Margin="0,0,0,12">
                             <TextBlock Text="Ученик" Style="{StaticResource DialogLabel}"/>
-                            <ComboBox ItemsSource="{Binding Students}"
-                                      SelectedItem="{Binding SelectedStudent}"
-                                      DisplayMemberPath="FullName"
-                                      Height="34"
-                                      FontSize="12"
-                                      VerticalContentAlignment="Center"/>
+                            <ComboBox Style="{StaticResource RoundedComboBox}"
+                              ItemsSource="{Binding Students}"
+                              SelectedItem="{Binding SelectedStudent}"
+                              DisplayMemberPath="FullName"/>
                         </StackPanel>
 
                         <!-- Предмет -->
                         <StackPanel Grid.Row="1" Margin="0,0,0,12">
                             <TextBlock Text="Предмет" Style="{StaticResource DialogLabel}"/>
-                            <ComboBox ItemsSource="{Binding SubjectsForAdd}"
-                                      SelectedItem="{Binding SelectedSubject}"
-                                      DisplayMemberPath="SubjectName"
-                                      Height="34"
-                                      FontSize="12"
-                                      VerticalContentAlignment="Center"/>
+                            <ComboBox Style="{StaticResource RoundedComboBox}"
+                              ItemsSource="{Binding SubjectsForAdd}"
+                              SelectedItem="{Binding SelectedSubject}"
+                              DisplayMemberPath="SubjectName"/>
                         </StackPanel>
 
                         <!-- Дата -->
@@ -385,7 +454,8 @@
                         <!-- Оценка -->
                         <StackPanel Grid.Row="3" Margin="0,0,0,20">
                             <TextBlock Text="Оценка" Style="{StaticResource DialogLabel}"/>
-                            <ComboBox ItemsSource="{Binding GradesList}"
+                            <ComboBox Style="{StaticResource RoundedComboBox}"
+                                      ItemsSource="{Binding GradesList}"
                                       SelectedItem="{Binding SelectedGrade}"
                                       Height="34"
                                       FontSize="12"
@@ -397,7 +467,7 @@
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Right">
                             <Button Content="{Binding IsEditMode, Converter={StaticResource EditModeToButtonConverter}}"
-                                    Width="110"
+                                    Width="379"
                                     Height="36"
                                     Style="{StaticResource GreenButton}"
                                     Command="{Binding SaveGradeCommand}"/>

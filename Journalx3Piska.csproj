@@ -69,9 +69,14 @@
     <Compile Include="Migrations\202605050543388_AndrewLox.Designer.cs">
       <DependentUpon>202605050543388_AndrewLox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202605062343530_MakeAverageGradeNull.cs" />
+    <Compile Include="Migrations\202605062343530_MakeAverageGradeNull.Designer.cs">
+      <DependentUpon>202605062343530_MakeAverageGradeNull.cs</DependentUpon>
+    </Compile>
     <Compile Include="RelayCommand.cs" />
     <Compile Include="ViewModels\GradesViewModel.cs" />
     <Compile Include="ViewModels\GradeView.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\SubjectsViewModel.cs" />
     <Compile Include="View\GradesView.xaml.cs">
@@ -153,6 +158,9 @@
     <EmbeddedResource Include="Migrations\202605050543388_AndrewLox.resx">
       <DependentUpon>202605050543388_AndrewLox.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202605062343530_MakeAverageGradeNull.resx">
+      <DependentUpon>202605062343530_MakeAverageGradeNull.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -166,7 +174,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Icon\flaticon.com-2.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -4,33 +4,85 @@
         xmlns:vm="clr-namespace:Journalx3Piska.ViewModels"
         xmlns:views="clr-namespace:Journalx3Piska.View"
         Title="Журнал"
-        Height="800" Width="1200"
-        WindowStartupLocation="CenterScreen"
+        Icon="/Icon/flaticon.com-2.ico"
+        WindowState="Maximized"
+        WindowStyle="SingleBorderWindow"
         Background="#F5F6FA">
 
-    <!-- 🎨 Стили -->
     <Window.Resources>
 
+        <!-- Навигационная кнопка -->
         <Style x:Key="NavButton" TargetType="Button">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Margin" Value="10,0"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="4,0"/>
+            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="Height" Value="60"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="0,0,0,3"
+                                BorderBrush="Transparent">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#3A5278"/>
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#FFD580"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Foreground" Value="#FFD580"/>
-                </Trigger>
-            </Style.Triggers>
+        <!-- Кнопка выхода -->
+        <Style x:Key="ExitButton" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#C0392B"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Width" Value="90"/>
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="6">
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                <TextBlock Text="⏻ "
+                                           VerticalAlignment="Center"
+                                           FontSize="13"/>
+                                <TextBlock Text="Выход"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#96281B"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <!-- ViewModel → View -->
         <DataTemplate DataType="{x:Type vm:GradesViewModel}">
             <views:GradesView/>
         </DataTemplate>
-
         <DataTemplate DataType="{x:Type vm:SubjectsViewModel}">
             <views:SubjectsView/>
         </DataTemplate>
@@ -43,63 +95,65 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <!-- 🔷 HEADER -->
-        <Grid Background="#4E6A91" Grid.Row="0">
+        <!-- HEADER -->
+        <Grid Grid.Row="0">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#3B5278" Offset="0"/>
+                    <GradientStop Color="#4E6A91" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Левая часть -->
-            <StackPanel Orientation="Horizontal"
+            <!-- Логотип + название -->
+            <StackPanel Grid.Column="0"
+                        Orientation="Horizontal"
                         VerticalAlignment="Center"
-                        Margin="20,0">
+                        Margin="20,0,10,0">
+                <Image Source="/Assets/icon.ico"
+                       Width="28"
+                       Height="28"
+                       VerticalAlignment="Center"
+                       Margin="0,0,8,0"
+                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                <TextBlock Text="Журнал"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Foreground="White"
+                           VerticalAlignment="Center"/>
+                <Border Width="1"
+                        Height="24"
+                        Background="#FFFFFF40"
+                        Margin="16,0"/>
+            </StackPanel>
 
-                <Button Content="🏠"
-                        Style="{StaticResource NavButton}"
-                        Command="{Binding ShowHomeCommand}"/>
-
-                <Button Content="Занятия"
-                        Style="{StaticResource NavButton}"
-                        Command="{Binding ShowStudentsCommand}"/>
-
+            <!-- Навигация -->
+            <StackPanel Grid.Column="1"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center">
                 <Button Content="Оценки"
                         Style="{StaticResource NavButton}"
                         Command="{Binding ShowGradesCommand}"/>
-
                 <Button Content="Предметы"
                         Style="{StaticResource NavButton}"
                         Command="{Binding ShowSubjectsCommand}"/>
-
-                <Button Content="Отчёты"
-                        Style="{StaticResource NavButton}"
-                        Command="{Binding ShowReportsCommand}"/>
             </StackPanel>
 
-            <!-- Правая часть -->
-            <StackPanel Orientation="Horizontal"
-                        Grid.Column="1"
+            <!-- Выход -->
+            <StackPanel Grid.Column="2"
                         VerticalAlignment="Center"
                         Margin="0,0,20,0">
-
-                <ToggleButton Content="🌙"
-                              Width="40"
-                              Height="30"
-                              Margin="10,0"
-                              Command="{Binding ToggleThemeCommand}"/>
-
-                <Button Content="Выход"
-                        Background="#B00020"
-                        Foreground="White"
-                        BorderThickness="0"
-                        Padding="10,5"
+                <Button Style="{StaticResource ExitButton}"
                         Command="{Binding ExitCommand}"/>
             </StackPanel>
         </Grid>
 
-        <!-- 🔽 КОНТЕНТ -->
+        <!-- КОНТЕНТ -->
         <ContentControl Grid.Row="1"
                         Content="{Binding CurrentViewModel}"/>
-
     </Grid>
 </Window>
